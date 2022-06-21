@@ -10,6 +10,7 @@ import { svelte } from '@sveltejs/vite-plugin-svelte'
 // }
 
 export default defineConfig({
-  plugins: [svelte()],
-  base: `https://${process.env.GITHUB_REPOSITORY_OWNER}.github.io/ome-ngff-validator/`
+  plugins: [svelte({
+    base: `https://${process.env.GITHUB_REPOSITORY_OWNER}.github.io/ome-ngff-validator/`
+  })]
 });
