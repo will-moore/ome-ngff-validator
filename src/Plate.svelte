@@ -1,7 +1,8 @@
 <script>
   import { CURRENT_VERSION, getVersion, getSchema } from "./utils";
 
-  import WellContainer from "./WellContainer.svelte";
+  import JsonLoader from "./JsonLoader.svelte";
+  import PlateWell from "./PlateWell.svelte";
 
   export let source;
   export let rootAttrs;
@@ -28,7 +29,10 @@
         <tr>
           {#each plateJson.columns as column}
             {#if wellPaths.indexOf(`${row.name}/${column.name}`) > -1}
-              <WellContainer path={`${row.name}/${column.name}`} {source} />
+              <JsonLoader let:jsonData={jsonData} url={source + `${row.name}/${column.name}` + "/.zattrs"}>
+                <td slot="loading"></td>
+                <PlateWell slot="element" wellAttrs={jsonData} {source} path={`${row.name}/${column.name}`} />
+              </JsonLoader>
             {:else}
               <td />
             {/if}

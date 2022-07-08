@@ -1,11 +1,12 @@
 <script>
-  import { getJson, formatBytes } from "./utils";
+  import { formatBytes } from "./utils";
   import Cube3D from "./Cube3D.svelte";
 
   export let source;
   export let path;
+  export let jsonData;
 
-  const promise = getJson(source + path + "/.zarray");
+  let zarray = jsonData;
 
   function chunkCount(zarray) {
     const ch = zarray.chunks;
@@ -24,44 +25,38 @@
 <div class="array">
   <p>Path <a href="{source + path + '/.zarray'} ">{path + "/.zarray"}</a></p>
 
-  {#await promise}
-    <div>loading array .zarray ...</div>
-  {:then zarray}
-    <table>
-      <tr>
-        <th /><th>Array</th><th>Chunk</th>
-      </tr>
-      <tr>
-        <th>Bytes</th>
-        <td>{getBytes(zarray.shape, zarray)}</td>
-        <td>{getBytes(zarray.chunks, zarray)}</td>
-      </tr>
-      <tr>
-        <th>Shape</th>
-        <td>{JSON.stringify(zarray.shape)}</td>
-        <td>{JSON.stringify(zarray.chunks)}</td>
-      </tr>
-      <tr>
-        <th>Count</th>
-        <td>{chunkCount(zarray) + 1} Tasks</td>
-        <td>{chunkCount(zarray)} Chunks</td>
-      </tr>
-      <tr>
-        <th>Type</th>
-        <td>{zarray.dtype}</td>
-        <td>numpy.ndarray</td>
-      </tr>
-    </table>
+  <table>
+    <tr>
+      <th /><th>Array</th><th>Chunk</th>
+    </tr>
+    <tr>
+      <th>Bytes</th>
+      <td>{getBytes(zarray.shape, zarray)}</td>
+      <td>{getBytes(zarray.chunks, zarray)}</td>
+    </tr>
+    <tr>
+      <th>Shape</th>
+      <td>{JSON.stringify(zarray.shape)}</td>
+      <td>{JSON.stringify(zarray.chunks)}</td>
+    </tr>
+    <tr>
+      <th>Count</th>
+      <td>{chunkCount(zarray) + 1} Tasks</td>
+      <td>{chunkCount(zarray)} Chunks</td>
+    </tr>
+    <tr>
+      <th>Type</th>
+      <td>{zarray.dtype}</td>
+      <td>numpy.ndarray</td>
+    </tr>
+  </table>
 
-    <Cube3D {zarray} />
+  <Cube3D {zarray} />
 
-    <details>
-      <summary>{path}/.zarray</summary>
-      <pre><code>{JSON.stringify(zarray, null, 2)}</code></pre>
-    </details>
-  {:catch error}
-    <p style="color: red">{error.message}</p>
-  {/await}
+  <details>
+    <summary>{path}/.zarray</summary>
+    <pre><code>{JSON.stringify(zarray, null, 2)}</code></pre>
+  </details>
 </div>
 
 <style>
