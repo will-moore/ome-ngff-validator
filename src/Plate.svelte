@@ -29,9 +29,12 @@
         <tr>
           {#each plateJson.columns as column}
             {#if wellPaths.indexOf(`${row.name}/${column.name}`) > -1}
-              <JsonLoader let:jsonData={jsonData} url={source + `${row.name}/${column.name}` + "/.zattrs"}>
+              <JsonLoader
+                let:jsonData={jsonData}
+                let:validationErrors={validationErrors}
+                url={source + `${row.name}/${column.name}` + "/.zattrs"}>
                 <td slot="loading"></td>
-                <PlateWell slot="element" wellAttrs={jsonData} {source} path={`${row.name}/${column.name}`} />
+                <PlateWell slot="element" {validationErrors} wellAttrs={jsonData} {source} path={`${row.name}/${column.name}`} />
               </JsonLoader>
             {:else}
               <td />

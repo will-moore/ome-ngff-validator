@@ -2,7 +2,7 @@
   import MultiscaleArrays from "./MultiscaleArrays.svelte";
   import Plate from "./Plate.svelte";
   import Well from "./Well.svelte"
-  import JsonBrowser from "./JsonBrowser.svelte";
+  import JsonBrowser from "./JsonBrowser/JsonBrowser.svelte";
   import {
     CURRENT_VERSION,
     getSchemaUrlForJson,

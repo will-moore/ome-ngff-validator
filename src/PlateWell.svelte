@@ -1,9 +1,10 @@
 <script>
   import { getJson, validate } from "./utils";
 
-  export let wellAttrs;
   export let source;
   export let path;
+  export let wellAttrs;
+  export let validationErrors;
 
   async function loadAndValidate() {
     console.log("wellAttrs", wellAttrs, wellAttrs.well);
@@ -13,16 +14,14 @@
     return errs;
   }
 
-  let validatePromise = validate(wellAttrs);
-
   let imagePromise = loadAndValidate();
 </script>
 
-{#await validatePromise}
-  <td>...</td>
-{:then errors}
-  <td class={errors.length === 0 ? "valid" : "invalid"}>
+  <td class={validationErrors.length === 0 ? "valid" : "invalid"}>
     <a title="{path}: Open Well" href="{window.origin}?source={source + path}/">
+      {#if validationErrors.length > 0}
+        <span title={JSON.stringify(validationErrors)}>O</span>
+      {/if}
       {#await imagePromise}
         &nbsp
       {:then imgErrors}
@@ -30,9 +29,6 @@
       {/await}
     </a>
   </td>
-{:catch error}
-  <td style="color: red">{error.message}</td>
-{/await}
 
 <style>
   td {

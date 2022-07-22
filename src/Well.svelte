@@ -7,7 +7,7 @@
   export let rootAttrs;
 
   let wellJson = rootAttrs.well;
-  let imagePaths = wellJson.images.map((img) => img.path);
+  let imagePaths = wellJson.images?.map((img) => img.path);
   // const column_count = Math.ceil(Math.sqrt(imagePaths.length))
   // const row_count = Math.ceil(imagePaths.length / column_count)
   const version = getVersion(rootAttrs) || CURRENT_VERSION;
