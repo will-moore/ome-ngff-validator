@@ -14,6 +14,7 @@
     "vite": "^2.9.9"
   },
   "dependencies": {
+    "@vitessce/config": "^2.0.2",
     "ajv": "^8.11.0",
     "svelte-icons-pack": "^1.4.6",
     "svelte-simple-modal": "^1.4.1",

@@ -1,5 +1,5 @@
 <script>
-  import { getJson } from "../utils";
+  import { VitessceConfig } from "@vitessce/config";
 
   import ObsmTable from "./ObsmTable.svelte";
   import ObsTable from "./ObsTable.svelte";
@@ -28,11 +28,97 @@
       table3.scrollTop = event.target.scrollTop;
     }
   }
+  let lastSlashIndex = source.lastIndexOf("/tables");
+  let imageUrl = source.substring(0, lastSlashIndex);
+  console.log("imageUrl", imageUrl);
+  const vc = new VitessceConfig({
+    schemaVersion: "1.0.15",
+    name: "OME-NGFF test",
+    description: "Config from ome-ngff-validator",
+  });
+  const dataset = vc.addDataset("NGFF table demo").addFile({
+    url: source,
+    fileType: "anndata.zarr",
+    coordinationValues: {
+      obsType: "cell",
+      featureType: "gene",
+      featureValueType: "expression",
+    },
+    options: {
+      obsLocations: {
+        path: "obsm/spatial",
+      },
+      obsSets: [
+        {
+          name: "Cell Type Annotations",
+          path: "obs/Cluster",
+        },
+      ],
+      obsFeatureMatrix: {
+        path: "X",
+      },
+    },
+  });
+  dataset.addFile({
+    url: source,
+    fileType: "anndata-cells.zarr",
+    coordinationValues: {},
+    options: {
+      xy: "obsm/spatial",
+      mappings: {
+        UMAP: {
+          key: "obsm/X_umap",
+          dims: [0, 1],
+        }
+      },
+    },
+  });
+  // TypeScript complains of no options:{} but Vitessce fails with empty options:{}
+  dataset.addFile({
+    url: imageUrl,
+    fileType: "raster.ome-zarr",
+    coordinationValues: {}
+  });
+  const [
+    embeddingTypeScope,
+    obsTypeScope,
+    featureTypeScope,
+    featureValueTypeScope,
+    featureValueColormapRangeScope,
+    spatialSegmentationLayerScope
+  ] = vc.addCoordination(
+    "embeddingType",
+    "obsType",
+    "obsType",
+    "featureValueType",
+    "featureValueColormapRange",
+    "spatialSegmentationLayer"
+  );
+  // without this, validation fails with "dataPath": ".coordinationSpace.obsType['A']" is null
+  // with this, validation fails with "dataPath": ".coordinationSpace.obsType['B']" is null
+  obsTypeScope.setValue("cell");
+  const v1 = vc.addView(dataset, "spatial", { w: 3, h: 3 });
+  const v2 = vc.addView(dataset, "scatterplot", {
+    w: 2,
+    h: 2
+  });
+  vc.addView(dataset, "status", {});
+  // We want ALL views to be coordinated with each other as much as possible
+  v1.useCoordination(obsTypeScope, featureTypeScope, featureValueTypeScope, spatialSegmentationLayerScope);
+  v2.useCoordination(embeddingTypeScope);
+  const vitessceJson = vc.toJSON();
+  console.log(vitessceJson);
+  const paramsObj = {
+    edit: "false",
+    url: `data:,${JSON.stringify(vitessceJson)}`,
+  };
+  const searchParams = new URLSearchParams(paramsObj).toString();
 </script>
 
 <article>
   <!-- code blocks for JSON for the table itself and the required 'obs' group -->
   <div>
+    <a target="_blank" href="http://vitessce.io?{searchParams}">Vitessce</a>
     <div class="zattrs grey">
       <details>
         <summary>table/.zattrs</summary>
