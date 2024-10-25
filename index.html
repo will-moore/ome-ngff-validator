@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" href="/favicon-16x16.png" />
+    <link rel="icon" href="https://will-moore.github.io/ome-ngff-validator/favicon-16x16.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>OME-NGFF validator</title>
 
@@ -169,13 +169,13 @@
       textarea:focus {
         outline-width: 0;
       }
-      select {
+      /* select {
         -moz-appearance: none;
         -webkit-appearance: none;
       }
       select::-ms-expand {
         display: none;
-      }
+      } */
       select::-ms-value {
         color: currentColor;
       }
@@ -210,6 +210,9 @@
         cursor: default;
       }
       body {
+        --omeRed: #df283f;
+        --omeGreen: #128669;
+        --omeLinkBlue: #1d8dcd;
         padding: 0;
         font-family: "Overpass", -apple-system, BlinkMacSystemFont, "Segoe UI",
           Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
@@ -230,8 +233,9 @@
         background: white;
         margin: 10px 0;
         text-align: center;
-        box-shadow: 10px 10px 20px rgba(125, 22, 2, 0.5);
+        box-shadow: 10px 10px 20px rgba(212, 239, 253, 0.5);
         width: 100%;
+        position: relative;
       }
 
       @media (min-width: 1000px) {
@@ -240,9 +244,11 @@
         }
       }
     </style>
+    <script type="module" crossorigin src="https://will-moore.github.io/ome-ngff-validator/assets/index.60b0d6f7.js"></script>
+    <link rel="stylesheet" href="https://will-moore.github.io/ome-ngff-validator/assets/index.a93e4805.css">
   </head>
   <body>
     <div id="app"></div>
-    <script type="module" src="/src/main.js"></script>
+    
   </body>
 </html>
